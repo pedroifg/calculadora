@@ -13,23 +13,75 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String numero = 'número';
+  double primeiroNumero = 0.0;
+  String operacao = '';
 
   void calcular(String tecla) {
     switch (tecla) {
+      case '0':
+      case '1':
+      case '2':
+      case '3':
+      case '4':
+      case '5':
+      case '6':
       case '7':
+      case '8':
+      case '9':
+      case ',':
         setState(() {
           numero = numero + tecla;
+
+          numero = numero.replaceAll(',', '.');
+
+          if (numero.contains('.')) {
+          } else {
+            int numeroInt = int.parse(numero);
+            numero = numeroInt.toString();
+          }
+          numero = numero.replaceAll('.', ',');
+
         });
         break;
+
+      case '+':
+        operacao = '+';
+        numero = numero.replaceAll(',', '.');
+        primeiroNumero = double.parse(numero);
+        numero = numero.replaceAll('.', ',');
+        numero = '0';
+        break;
+
+      case '=':
+        double resultado = 0.0;
+
+        if (operacao == '+') {
+          resultado = primeiroNumero + double.parse(numero);
+        }
+        String resultadoString = resultado.toString();
+
+        List<String> resultadoPartes = resultadoString.split('.');
+
+        if (int.parse(resultadoPartes[1]) * 1 == 0) {
+          setState(() {
+            numero = int.parse(resultadoPartes[0]).toString();
+          });
+        } else {
+          setState(() {
+            numero = resultado.toString();
+          });
+        }
+
+        break;
+
       case 'AC':
         setState(() {
           numero = '0';
         });
         break;
+
       default:
-        setState(() {
-          numero = numero + tecla;
-        });
+        numero += tecla;
         break;
     }
   }
@@ -112,16 +164,31 @@ class _MyAppState extends State<MyApp> {
                   onTap: () => calcular('3'),
                   child: Text('3', style: TextStyle(fontSize: 40)),
                 ),
-                Text('X', style: TextStyle(fontSize: 40)),
+                GestureDetector(
+                  onTap: () => calcular('X'),
+                  child: Text('X', style: TextStyle(fontSize: 40)),
+                ),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                GestureDetector(onTap: () => calcular('0'), child: Text('0', style: TextStyle(fontSize: 40))),
-                Text(',', style: TextStyle(fontSize: 40)),
-                Text('=', style: TextStyle(fontSize: 40)),
-                Text('+', style: TextStyle(fontSize: 40)),
+                GestureDetector(
+                  onTap: () => calcular('0'),
+                  child: Text('0', style: TextStyle(fontSize: 40)),
+                ),
+                GestureDetector(
+                  onTap: () => calcular(','),
+                  child: Text(',', style: TextStyle(fontSize: 40)),
+                ),
+                GestureDetector(
+                  onTap: () => calcular('='),
+                  child: Text('=', style: TextStyle(fontSize: 40)),
+                ),
+                GestureDetector(
+                  onTap: () => calcular('+'),
+                  child: Text('+', style: TextStyle(fontSize: 40)),
+                ),
               ],
             ),
           ],
