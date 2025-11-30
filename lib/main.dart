@@ -12,7 +12,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String numero = 'número';
+  String numero = '0';
   double primeiroNumero = 0.0;
   String operacao = '';
 
@@ -40,8 +40,15 @@ class _MyAppState extends State<MyApp> {
             numero = numeroInt.toString();
           }
           numero = numero.replaceAll('.', ',');
-
         });
+        break;
+
+      case '/':
+        operacao = '/';
+        numero = numero.replaceAll(',', '.');
+        primeiroNumero = double.parse(numero);
+        numero = numero.replaceAll('.', ',');
+        numero = '0';
         break;
 
       case '+':
@@ -55,9 +62,23 @@ class _MyAppState extends State<MyApp> {
       case '=':
         double resultado = 0.0;
 
+        if(operacao == '/') {
+          if(double.parse(numero) * 1 == 0) {
+            print("ERROR");
+            return;
+          }
+        }
+
         if (operacao == '+') {
           resultado = primeiroNumero + double.parse(numero);
+        } else if (operacao == '/') {
+          resultado = primeiroNumero / double.parse(numero);
+        } else if (operacao == '*') {
+          resultado = primeiroNumero * double.parse(numero);
+        } else {
+          resultado = primeiroNumero - double.parse(numero);
         }
+
         String resultadoString = resultado.toString();
 
         List<String> resultadoPartes = resultadoString.split('.');
@@ -128,7 +149,10 @@ class _MyAppState extends State<MyApp> {
                   onTap: () => calcular('9'),
                   child: Text('9', style: TextStyle(fontSize: 40)),
                 ),
-                Text('/', style: TextStyle(fontSize: 40)),
+                GestureDetector(
+                  onTap: () => calcular('/'),
+                  child: Text('/', style: TextStyle(fontSize: 40)),
+                ),
               ],
             ),
             Row(
@@ -146,7 +170,10 @@ class _MyAppState extends State<MyApp> {
                   onTap: () => calcular('6'),
                   child: Text('6', style: TextStyle(fontSize: 40)),
                 ),
-                Text('-', style: TextStyle(fontSize: 40)),
+                GestureDetector(
+                  onTap: () => calcular('-'),
+                  child: Text('-', style: TextStyle(fontSize: 40)),
+                ),
               ],
             ),
             Row(
