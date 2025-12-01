@@ -43,27 +43,30 @@ class _MyAppState extends State<MyApp> {
         });
         break;
 
+      case '+':
+      case '-':
+      case 'X':
       case '/':
-        operacao = '/';
+        operacao = tecla;
         numero = numero.replaceAll(',', '.');
         primeiroNumero = double.parse(numero);
         numero = numero.replaceAll('.', ',');
         numero = '0';
         break;
 
-      case '+':
-        operacao = '+';
-        numero = numero.replaceAll(',', '.');
-        primeiroNumero = double.parse(numero);
-        numero = numero.replaceAll('.', ',');
-        numero = '0';
+      case '<X':
+        setState(() {
+          if (numero.length > 0) {
+            numero = numero.substring(0, numero.length - 1);
+          }
+        });
         break;
 
       case '=':
         double resultado = 0.0;
 
-        if(operacao == '/') {
-          if(double.parse(numero) * 1 == 0) {
+        if (operacao == '/') {
+          if (double.parse(numero) * 1 == 0) {
             print("ERROR");
             return;
           }
@@ -73,7 +76,7 @@ class _MyAppState extends State<MyApp> {
           resultado = primeiroNumero + double.parse(numero);
         } else if (operacao == '/') {
           resultado = primeiroNumero / double.parse(numero);
-        } else if (operacao == '*') {
+        } else if (operacao == 'X') {
           resultado = primeiroNumero * double.parse(numero);
         } else {
           resultado = primeiroNumero - double.parse(numero);
@@ -130,7 +133,7 @@ class _MyAppState extends State<MyApp> {
                 Text(''),
                 GestureDetector(
                   onTap: () => calcular('<X'),
-                  child: Text('<X', style: TextStyle(fontSize: 40)),
+                  child: Image.asset('assets/images/arrow-back.png'),
                 ),
               ],
             ),
@@ -151,7 +154,7 @@ class _MyAppState extends State<MyApp> {
                 ),
                 GestureDetector(
                   onTap: () => calcular('/'),
-                  child: Text('/', style: TextStyle(fontSize: 40)),
+                  child: Image.asset('assets/images/divisao.png', width: 35),
                 ),
               ],
             ),
@@ -172,7 +175,7 @@ class _MyAppState extends State<MyApp> {
                 ),
                 GestureDetector(
                   onTap: () => calcular('-'),
-                  child: Text('-', style: TextStyle(fontSize: 40)),
+                  child: Image.asset('assets/images/subtracao.png'),
                 ),
               ],
             ),
@@ -193,7 +196,7 @@ class _MyAppState extends State<MyApp> {
                 ),
                 GestureDetector(
                   onTap: () => calcular('X'),
-                  child: Text('X', style: TextStyle(fontSize: 40)),
+                  child: Image.asset('assets/images/multiplicacao.png'),
                 ),
               ],
             ),
@@ -214,7 +217,7 @@ class _MyAppState extends State<MyApp> {
                 ),
                 GestureDetector(
                   onTap: () => calcular('+'),
-                  child: Text('+', style: TextStyle(fontSize: 40)),
+                  child: Image.asset('assets/images/soma.png', width: 30),
                 ),
               ],
             ),
